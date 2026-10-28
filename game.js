@@ -1,5 +1,5 @@
 /* Herní logika Vyšší, nebo nižší. Data okruhů jsou v data.js. */
-const VERSION = "0.2.0";
+const VERSION = "0.3.0";
 const CATS = window.CATS;
 const CAT_KEYS = Object.keys(CATS);
 
@@ -41,9 +41,38 @@ function toast(msg){
   const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);
   setTimeout(()=>t.remove(),2400);
 }
-function copyText(text, okMsg){
-  const fail = ()=>toast("Kopírování se nepovedlo");
-  try{ navigator.clipboard.writeText(text).then(()=>toast(okMsg)).catch(fail); }catch(e){ fail(); }
+/* Sdílení výsledku:
+   1) na mobilu a tam, kde to prohlížeč umí, nabídka Sdílet (WhatsApp, Messenger…)
+   2) jinak schránka přes Clipboard API
+   3) záložně starší způsob kopírování
+   4) když nejde nic, ukážeme text k ručnímu zkopírování */
+async function shareResult(text, okMsg){
+  if(navigator.share && (navigator.canShare ? navigator.canShare({text}) : true)){
+    try{ await navigator.share({text}); track("sdileni_ok",{zpusob:"share"}); return; }
+    catch(e){ if(e && e.name==="AbortError") return; }
+  }
+  try{
+    if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); toast(okMsg); track("sdileni_ok",{zpusob:"schranka"}); return; }
+  }catch(e){}
+  if(legacyCopy(text)){ toast(okMsg); track("sdileni_ok",{zpusob:"legacy"}); return; }
+  showShareText(text);
+}
+function legacyCopy(text){
+  try{
+    const ta=document.createElement("textarea");
+    ta.value=text; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.top="-1000px"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+    const ok=document.execCommand && document.execCommand("copy");
+    ta.remove(); return !!ok;
+  }catch(e){ return false; }
+}
+function showShareText(text){
+  const layer=document.createElement("div");
+  layer.className="adlayer";
+  layer.innerHTML=`<div class="adbox sharebox"><b class="sharetitle">Zkopíruj si výsledek</b><span class="adnote">Tento prohlížeč nepovolil automatické kopírování. Označ text a zkopíruj ho ručně.</span><textarea id="sharetext" readonly rows="6"></textarea><button class="btn primary" id="shareclose">Hotovo</button></div>`;
+  document.body.appendChild(layer);
+  const ta=document.getElementById("sharetext"); ta.value=text; ta.focus(); ta.select();
+  document.getElementById("shareclose").onclick=()=>layer.remove();
 }
 const SPK_ON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const SPK_OFF = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 6 6"/><path d="m22 9-6 6"/></svg>';
@@ -99,11 +128,11 @@ function renderMenu(){
         </button>`}).join("")}
     </section>
     <section class="how">
-      <div><strong>Čas běží</strong>Na každý tip máš 10 sekund. Čím déle hraješ, tím méně času.</div>
+      <div><strong>Čas běží</strong>Na každý tip máš 10 sekund. Čím déle hraješ, tím méně času. U denní výzvy 15 sekund.</div>
       <div><strong>Série násobí body</strong>Každých 5 správných v řadě zvedne násobič, až na ×4.</div>
       <div><strong>Jedna chyba a konec</strong>Pak to zkus znovu a překonej svůj rekord.</div>
     </section>
-    <p class="foot">Verze ${VERSION} · Zdroje: ČSÚ – počet obyvatel v obcích k 1. 1. 2025, průměrné spotřebitelské ceny za prosinec 2025. Reklama je zatím jen simulace.</p>`;
+    <p class="foot">Verze ${VERSION} · Zdroje: ČSÚ – počet obyvatel k 1. 1. 2025, průměrné spotřebitelské ceny za prosinec 2025; u hradů rok první písemné zmínky. Reklama je zatím jen simulace.</p>`;
   app.querySelectorAll(".cat").forEach(b=>b.onclick=()=>startGame(b.dataset.cat));
   document.getElementById("daily").onclick = ()=> done ? renderDailyOver() : startDaily();
 }
@@ -345,7 +374,7 @@ function renderOver(){
       <div class="actions">
         ${!S.continued && S.count>0 ? `<button class="btn ad" id="cont">Pokračovat po reklamě</button>` : ""}
         <button class="btn primary" id="again">Hrát znovu</button>
-        <button class="btn" id="share">Zkopírovat výsledek</button>
+        <button class="btn" id="share">Sdílet výsledek</button>
         <button class="btn" id="menu">Vybrat jiný okruh</button>
       </div>
       ${!S.continued && S.count>0 ? `<span class="adnote">Pokračování je ukázka monetizace: jednou za hru, po krátké reklamě.</span>`:""}
@@ -355,7 +384,7 @@ function renderOver(){
   document.getElementById("share").onclick = ()=>{
     const blocks = "🟩".repeat(Math.min(S.count,15)) + "🟥";
     track("sdileni",{typ:"klasicka"});
-    copyText(`Vyšší, nebo nižší · ${c.name}\n${S.score} bodů, ${S.count} správně v řadě\n${blocks}\n${location.origin}`, "Výsledek zkopírován, můžeš ho poslat dál");
+    shareResult(`Vyšší, nebo nižší · ${c.name}\n${S.score} bodů, ${S.count} správně v řadě\n${blocks}\n${location.origin}`, "Výsledek zkopírován, můžeš ho poslat dál");
   };
   const cont = document.getElementById("cont");
   if(cont) cont.onclick = playAd;
@@ -408,7 +437,7 @@ function renderDailyOver(){
   document.getElementById("menu").onclick = renderMenu;
   document.getElementById("share").onclick = ()=>{
     track("sdileni",{typ:"denni"});
-    copyText(`Vyšší, nebo nižší · Denní výzva ${prettyDate(date)}\n${ok}/10\n${grid}\n${location.origin}`, "Výsledek zkopírován, pošli ho kamarádům");
+    shareResult(`Vyšší, nebo nižší · Denní výzva ${prettyDate(date)}\n${ok}/10\n${grid}\n${location.origin}`, "Výsledek zkopírován, pošli ho kamarádům");
   };
 }
 

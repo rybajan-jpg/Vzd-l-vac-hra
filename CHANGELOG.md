@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0] – 2026-10-28
+### Přidáno
+- Pět nových okruhů: Kraje a okresy (ČSÚ, 89 položek), Hory a vrcholy (28), Hrady a zámky (23), Olympijští vítězové (22), Filmy a pohádky (35)
+- Ke všem novým položkám zajímavost „Věděl jsi, že…?“; u okresů počet obcí a největší obec podle dat ČSÚ
+- Automatické testy (Playwright) pro všechny okruhy, denní výzvu, sdílení a mobilní rozložení
+
+### Změněno
+- Sdílení výsledku: na telefonu otevře nabídku Sdílet (WhatsApp, Messenger…); jinak kopíruje do schránky; když prohlížeč kopírování zakáže, ukáže text k ručnímu zkopírování
+- Denní výzva teď míchá všech 8 okruhů
+
+### Opraveno
+- Hláška „Kopírování se nepovedlo“ v prohlížečích, které blokují přístup ke schránce
+- Na mobilu se kotouč „VS“ mohl dotknout hodnoty v horní kartě u dlouhých názvů
+
 ## [0.2.0] – 2026-10-28
 ### Přidáno
 - Denní výzva: 10 dvojic z mixu okruhů, stejných pro všechny hráče (podle data v českém čase), přehled výsledků a sdílení

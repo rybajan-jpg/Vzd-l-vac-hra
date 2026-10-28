@@ -1,6 +1,6 @@
 /* Service worker: hra funguje i offline a dá se nainstalovat na plochu.
    Při každém vydání zvedni CACHE, aby si hráči stáhli novou verzi. */
-const CACHE = "vn-0.2.0";
+const CACHE = "vn-0.3.0";
 const ASSETS = ["/", "/index.html", "/data.js", "/game.js", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", e => {

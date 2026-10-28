@@ -3,9 +3,14 @@
 Webová vědomostní hra v prohlížeči. Hráč vidí dvě položky a tipuje, jestli je hodnota té druhé vyšší, nebo nižší. Jedna chyba hru ukončí.
 
 ## Okruhy
-- **Města a obce ČR**: počet obyvatel
+- **Města a obce ČR**: počet obyvatel (ČSÚ)
+- **Kraje a okresy**: počet obyvatel (ČSÚ)
+- **Hory a vrcholy**: nadmořská výška
 - **Historie ČR**: letopočty událostí (dřív / později)
-- **Potraviny a ceny**: orientační ceny v obchodě (dražší / levnější)
+- **Hrady a zámky**: rok první písemné zmínky nebo založení
+- **Olympijští vítězové**: rok olympijského zlata
+- **Filmy a pohádky**: rok premiéry
+- **Potraviny a ceny**: průměrné ceny (ČSÚ)
 
 ## Herní mechaniky
 - Časový limit na tip: 10 s, s každým správným tipem se zkracuje (minimum 4 s)
@@ -34,3 +39,6 @@ Netlify publikuje kořen repozitáře (viz `netlify.toml`).
 
 ## Verzování
 Každá verze se zapisuje do `CHANGELOG.md`. Číslo verze je v `game.js` (`VERSION`) a v `sw.js` (`CACHE`), při vydání je potřeba zvednout obě.
+
+## Testy
+V kořeni repozitáře spusť `python3 -m http.server 8765` a pak `python3 tests/test_game.py http://127.0.0.1:8765/ .` (vyžaduje Playwright).

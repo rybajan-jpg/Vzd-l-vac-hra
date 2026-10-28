@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vyšší, nebo nižší</title>
-<meta name="description" content="Rychlá vědomostní hra: tipni si, jestli je druhá hodnota vyšší, nebo nižší. Města ČR, historie a ceny potravin. Každý den nová výzva.">
+<meta name="description" content="Rychlá vědomostní hra: tipni si, jestli je druhá hodnota vyšší, nebo nižší. Města, kraje, hory, historie, hrady, sport, filmy a ceny. Každý den nová výzva.">
 <meta name="theme-color" content="#4776C5">
 <meta property="og:title" content="Vyšší, nebo nižší">
-<meta property="og:description" content="Tipni si, jestli je druhá hodnota vyšší, nebo nižší. Města ČR, historie a ceny potravin. Kolik dáš v řadě?">
+<meta property="og:description" content="Tipni si, jestli je druhá hodnota vyšší, nebo nižší. Města, hory, hrady, historie, sport, filmy a ceny. Kolik dáš v řadě?">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="cs_CZ">
 <meta property="og:url" content="https://lighthearted-froyo-5754ae.netlify.app/">
@@ -173,6 +173,8 @@ button:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
 .adlayer{position:fixed;inset:0;background:rgba(18,24,33,.85);display:grid;place-items:center;z-index:30;padding:24px}
 .adbox{background:var(--surface);border-radius:20px;padding:28px;max-width:340px;text-align:center;display:flex;flex-direction:column;gap:10px}
 .adbox b{font-family:var(--f-display);font-size:48px;color:var(--primary)}
+.adbox .sharetitle{font-size:22px;color:var(--ink)}
+.sharebox textarea{width:100%;font:inherit;font-size:15px;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);resize:none}
 
 
 /* ---------- DENNÍ VÝZVA ---------- */
@@ -217,7 +219,8 @@ button:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
 @media (max-width:640px){
   .arena{display:flex;flex-direction:column;gap:0}
   .vs{position:relative;left:auto;top:auto;transform:none;margin:-14px auto;width:48px;height:48px;font-size:14px;box-shadow:0 0 0 5px var(--bg)}
-  .card.right{padding-top:30px}
+  .card.right{padding-top:32px}
+  .card.left{padding-bottom:32px}
 }
 
 @media (prefers-reduced-motion:reduce){
