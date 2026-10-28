@@ -76,7 +76,10 @@ button:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
 /* ---------- HRA ---------- */
 .hud{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .hud .left{display:flex;align-items:center;gap:10px;min-width:0}
-.iconbtn{width:40px;height:40px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-size:18px;flex:none}
+.iconbtn{height:40px;min-width:40px;padding:0 10px;border-radius:12px;background:var(--soft);color:var(--primary);display:grid;place-items:center;flex:none;transition:filter .15s}
+.iconbtn:hover{filter:brightness(.97)}
+.textbtn{height:40px;padding:0 16px;border-radius:12px;background:var(--soft);color:var(--primary);font-family:var(--f-display);font-weight:700;font-size:15px;flex:none;transition:filter .15s}
+.textbtn:hover{filter:brightness(.97)}
 .hud .catname{font-family:var(--f-display);font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stats{display:flex;gap:16px;align-items:flex-end}
 .stat{display:flex;flex-direction:column;align-items:flex-end;line-height:1}
@@ -311,7 +314,7 @@ function renderMenu(){
       <div><strong>Série násobí body</strong>Každých 5 správných v řadě zvedne násobič, až na ×4.</div>
       <div><strong>Jedna chyba a konec</strong>Pak to zkus znovu a překonej svůj rekord.</div>
     </section>
-    <p class="foot">Verze 0.1.0 · Prototyp. Data jsou přibližná a před spuštěním je potřeba je ověřit. Reklama je jen simulace.</p>`;
+    <p class="foot">Verze 0.1.1 · Prototyp. Data jsou přibližná a před spuštěním je potřeba je ověřit. Reklama je jen simulace.</p>`;
   app.querySelectorAll(".cat").forEach(b=>b.onclick=()=>startGame(b.dataset.cat));
 }
 
@@ -329,8 +332,8 @@ function renderGame(animate){
   app.innerHTML = `
     <div class="hud">
       <div class="left">
-        <button class="iconbtn" id="back" aria-label="Zpět do menu">←</button>
-        <button class="iconbtn" id="mute" aria-label="${muted?"Zapnout zvuk":"Vypnout zvuk"}">${muted?"🔇":"🔊"}</button>
+        <button class="textbtn" id="back">Menu</button>
+        <button class="iconbtn" id="mute" aria-label="${muted?"Zapnout zvuk":"Vypnout zvuk"}">${muted?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 6 6"/><path d="m22 9-6 6"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>'}</button>
         <span class="catname">${c.name}</span>
       </div>
       <div class="stats">
@@ -356,8 +359,8 @@ function renderGame(animate){
         <div class="value" id="rval">?</div>
         <div class="question">${c.question}</div>
         <div class="choices">
-          <button class="choice hi" id="hi">▲ ${c.hi}</button>
-          <button class="choice lo" id="lo">▼ ${c.lo}</button>
+          <button class="choice hi" id="hi">${c.hi}</button>
+          <button class="choice lo" id="lo">${c.lo}</button>
         </div>
       </div>
     </div>
@@ -469,7 +472,7 @@ function renderOver(){
       </div>
       ${isBest && S.score>0 ? `<span class="newbest">Nový rekord</span>` : `<span class="adnote">Rekord: ${best[S.cat]||0}</span>`}
       <div class="actions">
-        ${!S.continued && S.count>0 ? `<button class="btn ad" id="cont">▶ Pokračovat po reklamě</button>` : ""}
+        ${!S.continued && S.count>0 ? `<button class="btn ad" id="cont">Pokračovat po reklamě</button>` : ""}
         <button class="btn primary" id="again">Hrát znovu</button>
         <button class="btn" id="share">Zkopírovat výsledek</button>
         <button class="btn" id="menu">Vybrat jiný okruh</button>

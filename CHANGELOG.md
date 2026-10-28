@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.1] – 2026-10-28
+### Změněno
+- Tlačítka bez ikon: „Víc/Míň“, „Dřív/Později“, „Dražší/Levnější“ a „Pokračovat po reklamě“ jsou jen textová
+- Šipka zpět nahrazena tlačítkem „Menu“, emoji reproduktoru nahrazeno čistou ikonou ve stylu hry
+
 ## [0.1.0] – 2026-10-28
 První verze.
 
